@@ -6,7 +6,40 @@ import { useEffect, useState } from "react";
 import LoaderComp from "../../components/loader";
 import Link from 'next/link';
 
+
+
+export async function getStaticPaths() {
+    const paths = await getAllCharsId();
+    // console.log(paths)
+    // const paths = [
+    //     {params: {
+    //         id: '1'
+    //     }},
+    //     {params: {
+    //         id: '2'
+    //     }},
+    //     {params: {
+    //         id: '3'
+    //     }},
+    // ]
+    return {
+        paths,
+        fallback: true
+    }
+}
+
+export async function getStaticProps({ params }) {
+    const charData = await getCharacter(params.id)
+    return {
+        props: {
+            charData
+        },
+        revalidate: 1
+    }
+}
+
 export default function Characters({ charData }) {
+
     const router = useRouter();
     const [loading, setLoading] = useState(false);
   
@@ -24,6 +57,9 @@ export default function Characters({ charData }) {
         router.events.off('routeChangeError', handleComplete)
       }
     })
+
+    if(!charData) return null;
+    
     return (
         <Layout title={charData.name}>
             <div className="w-full">
@@ -54,22 +90,4 @@ export default function Characters({ charData }) {
             </div>
         </Layout>
     )
-}
-
-export async function getStaticPaths() {
-    const paths = await getAllCharsId();
-    return {
-        paths,
-        fallback: true
-    }
-}
-
-export async function getStaticProps({ params }) {
-    const charData = await getCharacter(params.id)
-    return {
-        props: {
-            charData
-        },
-        revalidate: 1
-    }
 }

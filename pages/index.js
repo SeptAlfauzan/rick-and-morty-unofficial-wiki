@@ -100,7 +100,7 @@ export default function Home({ data, pages }) {
           <div className="grid md:grid-cols-4 grid-cols-3 gap-2 w-3/4 mx-auto">
             {error ? <p> no data found </p> : results.map((res) => (
               <div key={res.id}>
-                <Link href={`/characters/${res.id}`} passHref>
+                <Link href={`/character/${res.id}`} passHref>
                   <div className="border pb-5 rounded-lg bg-white hover:text-blue-400 cursor-pointer" key={res.id} >
 
                     <ImgComp url={res.image} title={res.name} />
